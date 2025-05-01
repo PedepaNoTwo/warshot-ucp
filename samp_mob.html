@@ -1,0 +1,167 @@
+<!-- Warshot PVP - UCP Turbo v3.1 visual Brasil Play Shox style -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Warshot PVP - UCP</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #2e003e, #6800a1);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+    .container {
+      width: 400px;
+      background: rgba(0,0,0,0.85);
+      padding: 40px;
+      border-radius: 18px;
+      box-shadow: 0 0 80px rgba(160, 55, 255, 0.7);
+      border: 3px solid #a037ff;
+      text-align: center;
+      animation: pulse 6s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 30px rgba(160,55,255,0.3); }
+      50% { box-shadow: 0 0 100px rgba(160,55,255,0.9); }
+      100% { box-shadow: 0 0 30px rgba(160,55,255,0.3); }
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 25px;
+      background: linear-gradient(90deg, #ffffff 0%, #a037ff 50%, #ffffff 100%);
+      background-size: 200%;
+      background-position: 0%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: lightSweep 3s infinite ease-in-out;
+    }
+    @keyframes lightSweep {
+      0% { background-position: 0%; }
+      50% { background-position: 100%; }
+      100% { background-position: 0%; }
+    }
+    input, select {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 15px;
+      border-radius: 10px;
+      border: none;
+      background: #2e2e2e;
+      color: #fff;
+      outline: none;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 17px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: linear-gradient(90deg, #a037ff, #d45eff);
+      color: white;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg, #d45eff, #a037ff);
+      box-shadow: 0 0 12px rgba(212,94,255,0.5);
+    }
+    .link {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: #bbb;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="main">
+    <h1>Warshot PVP</h1>
+    <input type="text" placeholder="Conta" id="user">
+    <input type="password" placeholder="Senha" id="pass">
+    <select id="server">
+      <option value="1">Servidor 1</option>
+      <option value="2">Servidor 2</option>
+    </select>
+    <button class="btn" onclick="login()">Entrar</button>
+    <span class="link" onclick="showRegister()">Criar Conta</span>
+    <span class="link" onclick="alert('Função de recuperação ainda não implementada')">Esqueci minha senha</span>
+  </div>
+
+  <script>
+    const getUserData = (u) => JSON.parse(localStorage.getItem(`user_${u}`));
+
+    function login() {
+      const user = document.getElementById('user').value;
+      const pass = document.getElementById('pass').value;
+      const data = getUserData(user);
+
+      if (!user || !pass) return alert('Preencha todos os campos');
+      if (data && data.password === pass) {
+        showInfo(user, data);
+      } else {
+        alert('Conta não encontrada ou senha incorreta');
+      }
+    }
+
+    function showRegister() {
+      document.getElementById('main').innerHTML = `
+        <h1>Criar Conta</h1>
+        <input type="text" placeholder="Usuário" id="reg_user">
+        <input type="password" placeholder="Senha" id="reg_pass">
+        <input type="email" placeholder="Email de recuperação" id="reg_email">
+        <button class="btn" onclick="register()">Registrar</button>
+        <span class="link" onclick="location.reload()">Voltar</span>
+      `;
+    }
+
+    function register() {
+      const user = document.getElementById('reg_user').value;
+      const pass = document.getElementById('reg_pass').value;
+      const email = document.getElementById('reg_email').value;
+
+      if (!user || !pass || !email) return alert('Preencha todos os campos');
+      if (getUserData(user)) return alert('Usuário já existe');
+
+      const newUser = {
+        password: pass,
+        email: email,
+        nome: user,
+        nivel: 1,
+        dinheiro: 2500,
+        xp: 0,
+        moedas: 5,
+        socio: '0d 0h'
+      };
+      localStorage.setItem(`user_${user}`, JSON.stringify(newUser));
+      alert('Conta criada com sucesso!');
+      showInfo(user, newUser);
+    }
+
+    function showInfo(user, data) {
+      document.getElementById('main').innerHTML = `
+        <h1 style="background: linear-gradient(90deg, #fff, #a037ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Conta de ${data.nome}</h1>
+        <div style="text-align:left;margin-top:15px;">
+          <p><strong>Nome:</strong> ${data.nome}</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Nível:</strong> ${data.nivel}</p>
+          <p><strong>Dinheiro:</strong> R$${data.dinheiro.toLocaleString()}</p>
+          <p><strong>XP:</strong> ${data.xp}</p>
+          <p><strong>Moedas VIP:</strong> ${data.moedas}</p>
+          <p><strong>Tempo Sócio:</strong> ${data.socio}</p>
+          <button class="btn" onclick="location.reload()">Sair</button>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
