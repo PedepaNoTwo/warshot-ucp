@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warshot PVP - UCP</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #2e003e, #6800a1);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      background-image: radial-gradient(circle at 10% 20%, rgba(155, 89, 182, 0.1) 0%, rgba(30, 10, 60, 0.9) 90%);
+    }
+    .container {
+      width: 95%;
+      max-width: 800px;
+      background: rgba(0,0,0,0.85);
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 0 80px rgba(160, 55, 255, 0.7);
+      border: 3px solid #a037ff;
+      text-align: center;
+      animation: pulse 6s infinite ease-in-out;
+      margin: 20px 0;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 30px rgba(160,55,255,0.3); }
+      50% { box-shadow: 0 0 100px rgba(160,55,255,0.9); }
+      100% { box-shadow: 0 0 30px rgba(160,55,255,0.3); }
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 25px;
+      background: linear-gradient(90deg, #ffffff 0%, #a037ff 50%, #ffffff 100%);
+      background-size: 200%;
+      background-position: 0%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: lightSweep 3s infinite ease-in-out;
+    }
+    @keyframes lightSweep {
+      0% { background-position: 0%; }
+      50% { background-position: 100%; }
+      100% { background-position: 0%; }
+    }
+    input, select {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 15px;
+      border-radius: 10px;
+      border: none;
+      background: #2e2e2e;
+      color: #fff;
+      outline: none;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 17px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: linear-gradient(90deg, #a037ff, #d45eff);
+      color: white;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg, #d45eff, #a037ff);
+      box-shadow: 0 0 12px rgba(212,94,255,0.5);
+    }
+    .link {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: #bbb;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .server-tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .server-tab {
+      flex: 1;
+      padding: 10px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 10px;
+      background: #1f1f1f;
+      transition: 0.3s;
+      border: 2px solid transparent;
+    }
+    .server-tab.active {
+      border: 2px solid #a037ff;
+      background: #2e2e2e;
+    }
+    .admin-btn {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 15px;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      background: none;
+      color: white;
+      cursor: pointer;
+      position: relative;
+    }
+    .admin-btn::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 12px;
+      background: linear-gradient(270deg, red, orange, yellow, green, cyan, blue, violet, red);
+      background-size: 600% 600%;
+      animation: rainbowBorder 6s linear infinite;
+      z-index: -1;
+    }
+    @keyframes rainbowBorder {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      color: #bbb;
+    }
+    .admin-actions {
+      margin-top: 20px;
+      background: #2e2e2e;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: left;
+    }
+    .admin-actions button {
+      width: 100%;
+    }
+    .user-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .info-card {
+      background: rgba(160, 55, 255, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #a037ff;
+    }
+    .info-card h3 {
+      color: #d45eff;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    .info-card p {
+      font-size: 16px;
+    }
+    .vip-badge {
+      background: linear-gradient(90deg, #f1c40f, #f39c12);
+      color: #000;
+      padding: 3px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(160, 55, 255, 0.3);
+    }
+    th {
+      background: rgba(160, 55, 255, 0.2);
+      color: #d45eff;
+    }
+    tr:hover {
+      background: rgba(160, 55, 255, 0.1);
+    }
+    .action-btn {
+      padding: 5px 10px;
+      margin-right: 5px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .edit-btn {
+      background: #3498db;
+      color: white;
+    }
+    .delete-btn {
+      background: #e74c3c;
+      color: white;
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      border: 2px solid #a037ff;
+    }
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #bbb;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      .user-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="main">
+    <h1>Warshot PVP</h1>
+    <input type="text" placeholder="Conta" id="user">
+    <input type="password" placeholder="Senha" id="pass">
+    <div class="server-tabs" id="loginServers">
+      <div class="server-tab active" onclick="selectServer(1)">Servidor 1</div>
+      <div class="server-tab" onclick="selectServer(2)">Servidor 2</div>
+    </div>
+    <button class="btn" onclick="login()">Entrar</button>
+    <button class="admin-btn" onclick="showAdminLogin()">Administrador</button>
+    <span class="link" onclick="showRegister()">Criar Conta</span>
+    <span class="link" onclick="showRecoverOptions()">Recuperar Conta</span>
+  </div>
+  
+  <footer>
+    <p>© Desenvolvido Por PedepaNo - 2025</p>
+  </footer>
+
+  <!-- Modal de Edição -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('editModal')">&times;</span>
+      <h2 id="modalTitle">Editar Jogador</h2>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    // Variáveis globais
+    let selectedServer = 1;
+    let currentUser = null;
+    let currentAdmin = null;
+    let editingUserId = null;
+
+    // Dados de exemplo (substituir por banco de dados real)
+    const examplePlayers = [
+      { 
+        id: 1, 
+        name: "Jogador1", 
+        password: "senha123", 
+        email: "jogador1@email.com", 
+        level: 5, 
+        money: 5000, 
+        xp: 1200, 
+        vipCoins: 10, 
+        vipTime: "30 dias", 
+        server: 1, 
+        vipStatus: "Ativo" 
+      },
+      { 
+        id: 2, 
+        name: "Jogador2", 
+        password: "senha456", 
+        email: "jogador2@email.com", 
+        level: 10, 
+        money: 15000, 
+        xp: 4500, 
+        vipCoins: 25, 
+        vipTime: "7 dias", 
+        server: 1, 
+        vipStatus: "Ativo" 
+      },
+      { 
+        id: 3, 
+        name: "Jogador3", 
+        password: "senha789", 
+        email: "jogador3@email.com", 
+        level: 3, 
+        money: 1000, 
+        xp: 300, 
+        vipCoins: 0, 
+        vipTime: "Inativo", 
+        server: 2, 
+        vipStatus: "Inativo" 
+      }
+    ];
+
+    const exampleAdmins = [
+      { id: 1, username: "PedepaNo_Staff", password: "MessiGoat102", level: 99, server: 1 },
+      { id: 2, username: "Admin2", password: "senhaadmin", level: 50, server: 1 },
+      { id: 3, username: "Moderador1", password: "senhamod", level: 20, server: 2 }
+    ];
+
+    // Funções básicas
+    function selectServer(n) {
+      selectedServer = n;
+      document.querySelectorAll('.server-tab').forEach((el, idx) => {
+        el.classList.toggle('active', idx === n - 1);
+      });
+    }
+
+    function getUserData(username) {
+      // Em um sistema real, isso seria uma chamada AJAX para o servidor
+      const player = examplePlayers.find(p => p.name === username);
+      const admin = exampleAdmins.find(a => a.username === username);
+      return player || admin;
+    }
+
+    function saveUserData(username, data) {
+      // Em um sistema real, isso salvaria no banco de dados
+      const index = examplePlayers.findIndex(p => p.name === username);
+      if (index !== -1) {
+        examplePlayers[index] = data;
+      } else {
+        examplePlayers.push(data);
+      }
+    }
+
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Funções de autenticação
+    function login() {
+      const username = document.getElementById('user').value;
+      const password = document.getElementById('pass').value;
+      const data = getUserData(username);
+      
+      if (!username || !password) return alert('Preencha todos os campos');
+      
+      if (data) {
+        if (data.password === password && (data.server === selectedServer || data.servidor === selectedServer)) {
+          currentUser = data;
+          showUserPanel();
+        } else {
+          alert('Login ou senha incorretos, ou servidor errado!');
+        }
+      } else {
+        alert('Conta não encontrada!');
+      }
+    }
+
+    function showAdminLogin() {
+      document.getElementById('main').innerHTML = `
+        <h1>Login Admin</h1>
+        <input type="text" placeholder="Usuário Admin" id="admin_user">
+        <input type="password" placeholder="Senha Admin" id="admin_pass">
+        <div class="server-tabs">
+          <div class="server-tab active" onclick="selectServer(1)">Servidor 1</div>
+          <div class="server-tab" onclick="selectServer(2)">Servidor 2</div>
+        </div>
+        <button class="btn" onclick="loginAdmin()">Entrar</button>
+        <span class="link" onclick="location.reload()">Voltar</span>
+      `;
+    }
+
+    function loginAdmin() {
+      const username = document.getElementById('admin_user').value;
+      const password = document.getElementById('admin_pass').value;
+      const data = getUserData(username);
+
+      if (username === "PedepaNo_Staff" && password === "MessiGoat102") {
+        currentAdmin = { username: "PedepaNo_Staff", level: 99, server: selectedServer };
+        showAdminPanel();
+      } else if (data && data.level >= 50) {
+        currentAdmin = data;
+        showAdminPanel();
+      } else {
+        alert('Acesso negado - Credenciais inválidas ou nível insuficiente');
+      }
+    }
+
+    // Painel do Usuário
+    function showUserPanel() {
+      document.getElementById('main').innerHTML = `
+        <h1>Painel do Jogador</h1>
+        <div class="user-panel">
+          <div class="info-card">
+            <h3>Nome de Usuário</h3>
+            <p>${currentUser.name || currentUser.username}</p>
+          </div>
+          <div class="info-card">
+            <h3>Nível</h3>
+            <p>${currentUser.level}</p>
+          </div>
+          <div class="info-card">
+            <h3>Dinheiro</h3>
+            <p>$${currentUser.money?.toLocaleString() || '0'}</p>
+          </div>
+          <div class="info-card">
+            <h3>Experiência</h3>
+            <p>${currentUser.xp?.toLocaleString() || '0'}</p>
+          </div>
+          <div class="info-card">
+            <h3>Moedas VIP</h3>
+            <p>${currentUser.vipCoins || '0'}</p>
+          </div>
+          <div class="info-card">
+            <h3>Tempo de Sócio</h3>
+            <p>${currentUser.vipTime || 'Inativo'}</p>
+          </div>
+          <div class="info-card">
+            <h3>Servidor</h3>
+            <p>${currentUser.server || currentUser.servidor}</p>
+          </div>
+          <div class="info-card">
+            <h3>Status VIP</h3>
+            <p><span class="vip-badge">${currentUser.vipStatus === 'Ativo' ? 'VIP ATIVO' : 'VIP INATIVO'}</span></p>
+          </div>
+        </div>
+        <button class="btn" onclick="location.reload()">Sair</button>
+      `;
+    }
+
+    // Painel Administrativo
+    function showAdminPanel() {
+      document.getElementById('main').innerHTML = `
+        <h1>Painel Administrativo</h1>
+        <div class="admin-actions">
+          <button class="btn" onclick="showPlayerManagement()">Gerenciar Jogadores</button>
+          ${currentAdmin.level === 99 ? `
+            <button class="btn" onclick="showAdminManagement()">Gerenciar Admins</button>
+            <button class="btn" onclick="showAddAdminModal()">Adicionar Admin</button>
+          ` : ''}
+        </div>
+        <button class="btn" onclick="location.reload()">Sair</button>
+      `;
+    }
+
+    function showPlayerManagement() {
+      let playersHtml = `
+        <h2>Gerenciar Jogadores</h2>
+        <input type="text" id="playerSearch" placeholder="Buscar jogador..." oninput="searchPlayers()">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Nível</th>
+              <th>Dinheiro</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="playersTable">
+      `;
+
+      examplePlayers.forEach(player => {
+        if (player.server === currentAdmin.server || currentAdmin.level === 99) {
+          playersHtml += `
+            <tr>
+              <td>${player.id}</td>
+              <td>${player.name}</td>
+              <td>${player.level}</td>
+              <td>$${player.money.toLocaleString()}</td>
+              <td>
+                <button class="action-btn edit-btn" onclick="editPlayer(${player.id})">Editar</button>
+                ${currentAdmin.level === 99 ? `<button class="action-btn delete-btn" onclick="deletePlayer(${player.id})">Excluir</button>` : ''}
+              </td>
+            </tr>
+          `;
+        }
+      });
+
+      playersHtml += `
+          </tbody>
+        </table>
+        <button class="btn" onclick="showAdminPanel()">Voltar</button>
+      `;
+
+      document.getElementById('main').innerHTML = playersHtml;
+    }
+
+    function showAdminManagement() {
+      let adminsHtml = `
+        <h2>Gerenciar Administradores</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Nível</th>
+              <th>Servidor</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="adminsTable">
+      `;
+
+      exampleAdmins.forEach(admin => {
+        adminsHtml += `
+          <tr>
+            <td>${admin.id}</td>
+            <td>${admin.username}</td>
+            <td>${admin.level}</td>
+            <td>${admin.server}</td>
+            <td>
+              ${currentAdmin.level === 99 ? `
+                <button class="action-btn edit-btn" onclick="editAdmin(${admin.id})">Editar</button>
+                <button class="action-btn delete-btn" onclick="deleteAdmin(${admin.id})">Excluir</button>
+              ` : 'Sem permissão'}
+            </td>
+          </tr>
+        `;
+      });
+
+      adminsHtml += `
+          </tbody>
+        </table>
+        <button class="btn" onclick="showAdminPanel()">Voltar</button>
+      `;
+
+      document.getElementById('main').innerHTML = adminsHtml;
+    }
+
+    // Funções de edição
+    function editPlayer(playerId) {
+      const player = examplePlayers.find(p => p.id === playerId);
+      if (!player) return;
+
+      editingUserId = playerId;
+      
+      document.getElementById('modalTitle').textContent = `Editar ${player.name}`;
+      document.getElementById('modalContent').innerHTML = `
+        <div class="form-group">
+          <label>Nome</label>
+          <input type="text" id="editName" value="${player.name}">
+        </div>
+        <div class="form-group">
+          <label>Senha (deixe em branco para manter)</label>
+          <input type="password" id="editPassword">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="editEmail" value="${player.email}">
+        </div>
+        <div class="form-group">
+          <label>Nível</label>
+          <input type="number" id="editLevel" value="${player.level}" min="1" max="100">
+        </div>
+        <div class="form-group">
+          <label>Dinheiro</label>
+          <input type="number" id="editMoney" value="${player.money}" min="0">
+        </div>
+        <div class="form-group">
+          <label>XP</label>
+          <input type="number" id="editXp" value="${player.xp}" min="0">
+        </div>
+        <div class="form-group">
+          <label>Moedas VIP</label>
+          <input type="number" id="editVipCoins" value="${player.vipCoins}" min="0">
+        </div>
+        <button class="btn" onclick="savePlayerChanges()">Salvar Alterações</button>
+      `;
+
+      openModal('editModal');
+    }
+
+    function savePlayerChanges() {
+      const playerIndex = examplePlayers.findIndex(p => p.id === editingUserId);
+      if (playerIndex === -1) return;
+
+      const newPassword = document.getElementById('editPassword').value;
+      
+      examplePlayers[playerIndex] = {
+        ...examplePlayers[playerIndex],
+        name: document.getElementById('editName').value,
+        email: document.getElementById('editEmail').value,
+        level: parseInt(document.getElementById('editLevel').value),
+        money: parseInt(document.getElementById('editMoney').value),
+        xp: parseInt(document.getElementById('editXp').value),
+        vipCoins: parseInt(document.getElementById('editVipCoins').value),
+        password: newPassword || examplePlayers[playerIndex].password
+      };
+
+      closeModal('editModal');
+      showPlayerManagement();
+      alert('Alterações salvas com sucesso!');
+    }
+
+    function deletePlayer(playerId) {
+      if (!confirm('Tem certeza que deseja excluir este jogador?')) return;
+      
+      const playerIndex = examplePlayers.findIndex(p => p.id === playerId);
+      if (playerIndex !== -1) {
+        examplePlayers.splice(playerIndex, 1);
+        showPlayerManagement();
+        alert('Jogador excluído com sucesso!');
+      }
+    }
+
+    function showAddAdminModal() {
+      document.getElementById('modalTitle').textContent = 'Adicionar Administrador';
+      document.getElementById('modalContent').innerHTML = `
+        <div class="form-group">
+          <label>Nome de Usuário</label>
+          <input type="text" id="newAdminUsername">
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" id="newAdminPassword">
+        </div>
+        <div class="form-group">
+          <label>Nível (1-99)</label>
+          <input type="number" id="newAdminLevel" min="1" max="99" value="50">
+        </div>
+        <div class="form-group">
+          <label>Servidor</label>
+          <select id="newAdminServer">
+            <option value="1">Servidor 1</option>
+            <option value="2">Servidor 2</option>
+          </select>
+        </div>
+        <button class="btn" onclick="addNewAdmin()">Adicionar Admin</button>
+      `;
+
+      openModal('editModal');
+    }
+
+    function addNewAdmin() {
+      const username = document.getElementById('newAdminUsername').value;
+      const password = document.getElementById('newAdminPassword').value;
+      const level = parseInt(document.getElementById('newAdminLevel').value);
+      const server = parseInt(document.getElementById('newAdminServer').value);
+
+      if (!username || !password) {
+        alert('Preencha todos os campos obrigatórios');
+        return;
+      }
+
+      if (level < 1 || level > 99) {
+        alert('O nível do admin deve estar entre 1 e 99');
+        return;
+      }
+
+      const newAdmin = {
+        id: exampleAdmins.length + 1,
+        username: username,
+        password: password,
+        level: level,
+        server: server
+      };
+
+      exampleAdmins.push(newAdmin);
+      closeModal('editModal');
+      showAdminManagement();
+      alert('Administrador adicionado com sucesso!');
+    }
+
+    function editAdmin(adminId) {
+      const admin = exampleAdmins.find(a => a.id === adminId);
+      if (!admin) return;
+
+      editingUserId = adminId;
+      
+      document.getElementById('modalTitle').textContent = `Editar ${admin.username}`;
+      document.getElementById('modalContent').innerHTML = `
+        <div class="form-group">
+          <label>Nome de Usuário</label>
+          <input type="text" id="editAdminUsername" value="${admin.username}">
+        </div>
+        <div class="form-group">
+          <label>Senha (deixe em branco para manter)</label>
+          <input type="password" id="editAdminPassword">
+        </div>
+        <div class="form-group">
+          <label>Nível (1-99)</label>
+          <input type="number" id="editAdminLevel" value="${admin.level}" min="1" max="99">
+        </div>
+        <div class="form-group">
+          <label>Servidor</label>
+          <select id="editAdminServer">
+            <option value="1" ${admin.server === 1 ? 'selected' : ''}>Servidor 1</option>
+            <option value="2" ${admin.server === 2 ? 'selected' : ''}>Servidor 2</option>
+          </select>
+        </div>
+        <button class="btn" onclick="saveAdminChanges()">Salvar Alterações</button>
+      `;
+
+      openModal('editModal');
+    }
+
+    function saveAdminChanges() {
+      const adminIndex = exampleAdmins.findIndex(a => a.id === editingUserId);
+      if (adminIndex === -1) return;
+
+      const newPassword = document.getElementById('editAdminPassword').value;
+      
+      exampleAdmins[adminIndex] = {
+        ...exampleAdmins[adminIndex],
+        username: document.getElementById('editAdminUsername').value,
+        level: parseInt(document.getElementById('editAdminLevel').value),
+        server: parseInt(document.getElementById('editAdminServer').value),
+        password: newPassword || exampleAdmins[adminIndex].password
+      };
+
+      closeModal('editModal');
+      showAdminManagement();
+      alert('Alterações salvas com sucesso!');
+    }
+
+    function deleteAdmin(adminId) {
+      if (!confirm('Tem certeza que deseja excluir este administrador?')) return;
+      
+      const adminIndex = exampleAdmins.findIndex(a => a.id === adminId);
+      if (adminIndex !== -1) {
+        exampleAdmins.splice(adminIndex, 1);
+        showAdminManagement();
+        alert('Administrador excluído com sucesso!');
+      }
+    }
+
+    function searchPlayers() {
+      const searchTerm = document.getElementById('playerSearch').value.toLowerCase();
+      const rows = document.querySelectorAll('#playersTable tr');
+
+      rows.forEach(row => {
+        const name = row.cells[1].textContent.toLowerCase();
+        row.style.display = name.includes(searchTerm) ? '' : 'none';
+      });
+    }
+
+    // Funções de registro e recuperação
+    function showRegister() {
+      document.getElementById('main').innerHTML = `
+        <h1>Criar Conta</h1>
+        <input type="text" placeholder="Usuário" id="reg_user">
+        <input type="password" placeholder="Senha" id="reg_pass">
+        <input type="email" placeholder="Email de recuperação" id="reg_email">
+        <div class="server-tabs">
+          <div class="server-tab active" onclick="selectServer(1)">Servidor 1</div>
+          <div class="server-tab" onclick="selectServer(2)">Servidor 2</div>
+        </div>
+        <button class="btn" onclick="register()">Registrar</button>
+        <span class="link" onclick="location.reload()">Voltar</span>
+      `;
+    }
+
+    function register() {
+      const username = document.getElementById('reg_user').value;
+      const password = document.getElementById('reg_pass').value;
+      const email = document.getElementById('reg_email').value;
+      
+      if (!username || !password || !email) return alert('Preencha todos os campos');
+      if (getUserData(username)) return alert('Usuário já existe');
+
+      const newUser = {
+        id: examplePlayers.length + 1,
+        name: username,
+        password: password,
+        email: email,
+        level: 1,
+        money: 2500,
+        xp: 0,
+        vipCoins: 5,
+        vipTime: "0 dias",
+        server: selectedServer,
+        vipStatus: "Inativo"
+      };
+
+      examplePlayers.push(newUser);
+      currentUser = newUser;
+      showUserPanel();
+      alert('Conta criada com sucesso!');
+    }
+
+    function showRecoverOptions() {
+      document.getElementById('main').innerHTML = `
+        <h1>Recuperar Conta</h1>
+        <button class="btn" onclick="showEmailRecovery()">Enviar código por email</button>
+        <button class="btn" onclick="showAdminContact()">Falar com administrador</button>
+        <span class="link" onclick="location.reload()">Voltar</span>
+      `;
+    }
+
+    function showEmailRecovery() {
+      document.getElementById('main').innerHTML = `
+        <h1>Recuperação por Email</h1>
+        <input type="text" placeholder="Nome de usuário" id="recoverUser">
+        <input type="email" placeholder="Email de recuperação" id="recoverEmail">
+        <button class="btn" onclick="sendRecoveryEmail()">Enviar Código</button>
+        <span class="link" onclick="showRecoverOptions()">Voltar</span>
+      `;
+    }
+
+    function sendRecoveryEmail() {
+      const username = document.getElementById('recoverUser').value;
+      const email = document.getElementById('recoverEmail').value;
+      const user = examplePlayers.find(p => p.name === username && p.email === email);
+
+      if (user) {
+        alert(`Código de recuperação enviado para: ${email}`);
+      } else {
+        alert('Usuário não encontrado ou email incorreto');
+      }
+    }
+
+    function showAdminContact() {
+      document.getElementById('main').innerHTML = `
+        <h1>Contato com Administrador</h1>
+        <p>Para recuperar sua conta, entre em contato com um administrador através do Discord:</p>
+        <p style="font-weight: bold; margin: 15px 0;">discord.gg/seuserver</p>
+        <p>Ou envie um email para: <strong>admin@seuservidor.com</strong></p>
+        <button class="btn" onclick="showRecoverOptions()">Voltar</button>
+      `;
+    }
+  </script>
+</body>
+</html>
