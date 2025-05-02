@@ -4,124 +4,255 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Warshot PVP - UCP</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #a037ff;
+      --primary-dark: #8a2be2;
+      --secondary: #d45eff;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #2e003e, #6800a1);
-      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #fff;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+      background: url('https://images.unsplash.com/photo-1518655048521-f130df041f66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+      background-size: cover;
     }
-    .container {
-      width: 95%;
-      max-width: 800px;
-      background: rgba(0,0,0,0.85);
-      padding: 30px;
-      border-radius: 18px;
-      box-shadow: 0 0 80px rgba(160, 55, 255, 0.7);
-      border: 3px solid #a037ff;
+    
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 0;
+    }
+    
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    
+    .particle {
+      position: absolute;
+      background: rgba(160, 55, 255, 0.5);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    .login-container {
+      background: rgba(26, 0, 51, 0.5);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(160, 55, 255, 0.3);
+      width: 420px;
+      padding: 40px;
       text-align: center;
+      z-index: 2;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.5s ease;
     }
+    
+    .login-container:hover {
+      transform: translateY(-10px);
+    }
+    
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -40%;
+      width: 100%;
+      height: 100%;
+      background: rgba(160, 55, 255, 0.05);
+      transform: skewX(-15deg);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
     h1 {
-      font-size: 32px;
-      margin-bottom: 25px;
+      font-size: 28px;
+      color: var(--light);
+      margin-bottom: 30px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       background: linear-gradient(90deg, #ffffff 0%, #a037ff 50%, #ffffff 100%);
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: shine 3s linear infinite;
     }
+    
     @keyframes shine {
       0% { background-position: 0% center; }
       100% { background-position: 200% center; }
     }
+    
+    .input-group {
+      margin-bottom: 25px;
+      text-align: left;
+      position: relative;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
+    
+    .input-field {
+      position: relative;
+    }
+    
     input, select {
       width: 100%;
-      padding: 14px;
-      margin: 10px 0;
+      padding: 15px 20px 15px 45px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(160, 55, 255, 0.3);
       border-radius: 10px;
-      border: none;
-      background: #2e2e2e;
-      color: #fff;
+      font-size: 14px;
+      color: var(--light);
+      transition: all 0.3s ease;
     }
+    
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    input:focus, select:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(160, 55, 255, 0.3);
+      background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 16px;
+    }
+    
     .btn {
       width: 100%;
-      padding: 14px;
+      padding: 15px;
+      background: var(--gradient);
+      color: white;
       border: none;
       border-radius: 10px;
-      background: linear-gradient(90deg, #a037ff, #d45eff);
-      color: white;
-      margin-top: 15px;
+      font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
+      transition: all 0.3s ease;
+      margin-top: 10px;
       box-shadow: 0 5px 15px rgba(160, 55, 255, 0.4);
-    }
-    .btn-secondary {
-      background: linear-gradient(90deg, #6c757d, #5a6268);
-    }
-    .link {
-      display: block;
-      margin-top: 12px;
-      color: #bbb;
-      text-decoration: underline;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .link:hover {
-      color: #a037ff;
-    }
-    .server-tabs {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 10px;
-    }
-    .server-tab {
-      padding: 10px;
-      border-radius: 10px;
-      background: #1f1f1f;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .server-tab:hover {
-      background: #2e2e2e;
-    }
-    .server-tab.active {
-      background: #2e2e2e;
-      border: 2px solid #a037ff;
-    }
-    footer {
-      position: fixed;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      color: #bbb;
-      font-size: 14px;
-    }
-
-    /* --- BOTÃO ADMIN COM EFEITO DE LUZES --- */
-    .admin-btn {
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 15px;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      background: none;
-      color: white;
-      cursor: pointer;
       position: relative;
       overflow: hidden;
-      transition: all 0.3s;
     }
-    .admin-btn:hover {
+    
+    .btn:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+      box-shadow: 0 7px 20px rgba(160, 55, 255, 0.6);
       transform: translateY(-2px);
     }
+    
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: rotate(45deg);
+      transition: all 0.5s ease;
+    }
+    
+    .btn:hover::after {
+      left: 100%;
+    }
+    
+    .links {
+      margin-top: 25px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .links a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+    
+    /* Botão Admin */
+    .admin-btn {
+      width: 100%;
+      padding: 15px;
+      background: transparent;
+      color: white;
+      border: 2px solid var(--primary);
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .admin-btn:hover {
+      background: rgba(160, 55, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
     .admin-btn::before {
       content: '';
       position: absolute;
@@ -134,79 +265,65 @@
       animation: rainbowBorder 6s linear infinite;
       z-index: -1;
     }
+    
     @keyframes rainbowBorder {
       0% { background-position: 0% 50%; }
       100% { background-position: 100% 50%; }
     }
-
-    /* --- MENUS LATERAIS --- */
-    .side-menu {
-      position: fixed;
-      top: 0;
-      left: -280px;
-      width: 280px;
-      height: 100%;
-      background: rgba(20, 10, 30, 0.95);
-      padding: 20px 0;
-      transition: left 0.3s;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-    }
-    .side-menu.active {
-      left: 0;
-    }
-    .menu-toggle {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background: rgba(160, 55, 255, 0.3);
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: white;
-      z-index: 101;
-      transition: all 0.3s;
-    }
-    .menu-toggle:hover {
-      background: rgba(160, 55, 255, 0.5);
-      transform: scale(1.1);
-    }
-    .menu-items {
-      list-style: none;
-      padding: 15px;
-    }
-    .menu-items a {
+    
+    /* Server Tabs */
+    .server-tabs {
       display: flex;
-      align-items: center;
-      padding: 12px;
-      color: #ddd;
-      text-decoration: none;
-      border-radius: 5px;
-      margin-bottom: 5px;
-      transition: all 0.3s;
-    }
-    .menu-items a:hover {
-      background: rgba(160, 55, 255, 0.2);
-      transform: translateX(5px);
-    }
-    .menu-items span.material-symbols-outlined {
-      margin-right: 10px;
-    }
-
-    /* MENU ADMIN */
-    .admin-menu .menu-items a {
-      color: #ff5555;
-    }
-    .admin-menu .menu-items a:hover {
-      background: rgba(255, 85, 85, 0.1);
+      justify-content: space-between;
+      margin: 15px 0;
+      gap: 10px;
     }
     
-    /* ESTILOS PARA AS INFORMAÇÕES DO PLAYER */
+    .server-tab {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      border: 1px solid rgba(160, 55, 255, 0.3);
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .server-tab:hover {
+      background: rgba(160, 55, 255, 0.2);
+    }
+    
+    .server-tab.active {
+      background: rgba(160, 55, 255, 0.3);
+      border: 1px solid var(--primary);
+      color: white;
+      box-shadow: 0 0 10px rgba(160, 55, 255, 0.5);
+    }
+    
+    /* Alertas */
+    .alert {
+      padding: 12px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+    
+    .alert-success {
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #00ff00;
+      color: #00ff00;
+    }
+    
+    .alert-error {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid #ff0000;
+      color: #ff0000;
+    }
+
+    /* Player Info */
     .player-info {
       text-align: left;
       margin: 20px 0;
@@ -272,7 +389,7 @@
       display: block;
     }
     
-    /* INVENTÁRIO E LOJA */
+    /* Inventory */
     .inventory-grid, .shop-items {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -325,74 +442,156 @@
     .shop-tab:hover {
       color: #d45eff;
     }
-    
-    /* PÁGINAS DE REGISTRO E RECUPERAÇÃO */
-    .form-container {
-      animation: fadeIn 0.5s ease-out;
+
+    /* Admin Panel */
+    .admin-panel {
+      text-align: left;
     }
     
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .admin-section {
+      background: rgba(30, 30, 30, 0.7);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border-left: 4px solid #ff5555;
     }
     
-    .back-btn {
+    .admin-section h3 {
+      color: #ff5555;
+      margin-bottom: 10px;
+    }
+    
+    .admin-actions {
       display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .admin-actions .btn {
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    /* Menu Toggle */
+    .menu-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(160, 55, 255, 0.3);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: none;
       align-items: center;
       justify-content: center;
-      margin-top: 15px;
-      color: #a037ff;
       cursor: pointer;
+      color: white;
+      z-index: 101;
       transition: all 0.3s;
     }
     
-    .back-btn:hover {
-      color: #d45eff;
+    .menu-toggle:hover {
+      background: rgba(160, 55, 255, 0.5);
+      transform: scale(1.1);
+    }
+
+    /* Side Menu */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 280px;
+      height: 100%;
+      background: rgba(20, 10, 30, 0.95);
+      padding: 20px 0;
+      transition: left 0.3s;
+      z-index: 100;
+      backdrop-filter: blur(10px);
     }
     
-    .back-btn span {
-      margin-right: 5px;
+    .side-menu.active {
+      left: 0;
     }
     
-    /* MENSAGENS DE ERRO/SUCESSO */
-    .alert {
-      padding: 10px;
+    .menu-items {
+      list-style: none;
+      padding: 15px;
+    }
+    
+    .menu-items a {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      color: #ddd;
+      text-decoration: none;
       border-radius: 5px;
-      margin: 10px 0;
+      margin-bottom: 5px;
+      transition: all 0.3s;
+    }
+    
+    .menu-items a:hover {
+      background: rgba(160, 55, 255, 0.2);
+      transform: translateX(5px);
+    }
+    
+    .menu-items i {
+      margin-right: 10px;
+      width: 20px;
       text-align: center;
     }
     
-    .alert-success {
-      background: rgba(0, 255, 0, 0.1);
-      border: 1px solid #00ff00;
-      color: #00ff00;
+    /* Admin Menu */
+    .admin-menu .menu-items a {
+      color: #ff5555;
     }
     
-    .alert-error {
-      background: rgba(255, 0, 0, 0.1);
-      border: 1px solid #ff0000;
-      color: #ff0000;
+    .admin-menu .menu-items a:hover {
+      background: rgba(255, 85, 85, 0.1);
+    }
+    
+    /* Responsividade */
+    @media (max-width: 480px) {
+      .login-container {
+        width: 90%;
+        padding: 30px;
+      }
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      .player-stats, .inventory-grid, .shop-items {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .menu-toggle {
+        display: flex;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Botões de menu (inicialmente invisíveis) -->
-  <button class="menu-toggle" id="playerMenuToggle" onclick="toggleMenu('player')">☰</button>
-  <button class="menu-toggle" id="adminMenuToggle" onclick="toggleMenu('admin')">☰</button>
+  <!-- Efeito de partículas -->
+  <div class="particles" id="particles"></div>
+  
+  <!-- Botões de menu -->
+  <button class="menu-toggle" id="playerMenuToggle" onclick="toggleMenu('player')"><i class="fas fa-bars"></i></button>
+  <button class="menu-toggle" id="adminMenuToggle" onclick="toggleMenu('admin')"><i class="fas fa-bars"></i></button>
 
   <!-- Menus Laterais -->
   <div class="side-menu" id="playerMenu">
     <ul class="menu-items">
       <li><a href="#" onclick="showPlayerInfo()">
-        <span class="material-symbols-outlined">person</span>
+        <i class="fas fa-user"></i>
         Informações
       </a></li>
       <li><a href="#" onclick="showShop()">
-        <span class="material-symbols-outlined">shopping_cart</span>
+        <i class="fas fa-shopping-cart"></i>
         Loja
       </a></li>
       <li><a href="#" onclick="logout()">
-        <span class="material-symbols-outlined">logout</span>
+        <i class="fas fa-sign-out-alt"></i>
         Sair
       </a></li>
     </ul>
@@ -401,51 +600,66 @@
   <div class="side-menu admin-menu" id="adminMenu">
     <ul class="menu-items">
       <li><a href="#" onclick="showAdminPanel()">
-        <span class="material-symbols-outlined">dashboard</span>
+        <i class="fas fa-tachometer-alt"></i>
         Painel Admin
       </a></li>
       <li><a href="#" onclick="showReports()">
-        <span class="material-symbols-outlined">report</span>
+        <i class="fas fa-exclamation-circle"></i>
         Denúncias
       </a></li>
       <li><a href="#" onclick="showPlayerManagement()">
-        <span class="material-symbols-outlined">groups</span>
+        <i class="fas fa-users"></i>
         Gerenciar Players
       </a></li>
       <li><a href="#" onclick="showAdminManagement()">
-        <span class="material-symbols-outlined">admin_panel_settings</span>
+        <i class="fas fa-user-shield"></i>
         Dar Admin
       </a></li>
       <li><a href="#" onclick="logout()">
-        <span class="material-symbols-outlined">logout</span>
+        <i class="fas fa-sign-out-alt"></i>
         Sair
       </a></li>
     </ul>
   </div>
 
   <!-- Conteúdo Principal -->
-  <div class="container" id="main">
+  <div class="login-container" id="main">
     <h1>Warshot PVP</h1>
-    <div id="loginForm" class="form-container">
-      <input type="text" placeholder="Conta" id="user">
-      <input type="password" placeholder="Senha" id="pass">
+    
+    <div id="loginForm">
+      <div class="input-group">
+        <label for="user">Nome de Usuário</label>
+        <div class="input-field">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" id="user" placeholder="Digite seu usuário" required>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label for="pass">Senha</label>
+        <div class="input-field">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="pass" placeholder="Digite sua senha" required>
+        </div>
+      </div>
+      
       <div class="server-tabs" id="loginServers">
         <div class="server-tab active" onclick="selectServer(1)">Servidor 1</div>
         <div class="server-tab" onclick="selectServer(2)">Servidor 2</div>
       </div>
+      
       <button class="btn" onclick="login()">Entrar</button>
-      <button class="admin-btn" onclick="showAdminLogin()">Administrador</button>
-      <span class="link" onclick="showRegisterForm()">Criar Conta</span>
-      <span class="link" onclick="showRecoverForm()">Esqueceu a senha?</span>
+      <button class="admin-btn" onclick="showAdminLogin()">Acesso Staff</button>
+      
+      <div class="links">
+        <a href="#" onclick="showRegisterForm()"><i class="fas fa-user-plus"></i> Criar Conta</a>
+        <a href="#" onclick="showRecoverForm()"><i class="fas fa-key"></i> Recuperar Senha</a>
+      </div>
     </div>
   </div>
   
-  <footer>
-    <p>© Desenvolvido Por PedepaNo - 2025 | Todos os direitos reservados</p>
-  </footer>
-
   <script>
-    // Dados de exemplo atualizados
+    // Dados de exemplo
     const players = [
       { 
         name: "Jogador1", 
@@ -502,13 +716,6 @@
       { username: "PedepaNo_Staff", password: "MessiGoat102", level: 1342 }
     ];
 
-    // Variáveis de estado
-    let currentUser = null;
-    let currentAdmin = null;
-    let selectedServer = 1;
-    let recoveryEmail = '';
-    let currentShopTab = 'vip';
-
     // Itens da loja
     const shopItems = {
       vip: [
@@ -531,6 +738,34 @@
         { id: 13, name: "Bati 801", price: 90, type: "bike" }
       ]
     };
+
+    // Variáveis de estado
+    let currentUser = null;
+    let currentAdmin = null;
+    let selectedServer = 1;
+    let recoveryEmail = '';
+    let currentShopTab = 'vip';
+
+    // Criar partículas dinâmicas
+    document.addEventListener('DOMContentLoaded', function() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 20;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 4 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+        particle.style.animationDelay = `${Math.random() * 10}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    });
 
     // Funções do menu
     function toggleMenu(type) {
@@ -710,7 +945,6 @@
       const pack = shopItems.coins.find(p => p.id === packageId);
       if (!pack) return;
       
-      // Simulação de pagamento - na prática aqui seria integrado com um gateway de pagamento
       showAlert(`Redirecionando para pagamento de ${pack.realMoney}...`, 'success');
       setTimeout(() => {
         // Simula a compra bem-sucedida
@@ -743,11 +977,20 @@
     function showAdminPanel() {
       document.getElementById('main').innerHTML = `
         <h1>Painel Administrativo</h1>
-        <div>Bem-vindo, Admin ${currentAdmin.username}</div>
-        <div>Nível: ${currentAdmin.level}</div>
-        <div style="margin: 20px 0;">
-          <button class="btn" onclick="showServerControl()">Controle do Servidor</button>
-          <button class="btn" onclick="showPlayerStats()">Estatísticas de Jogadores</button>
+        <div class="admin-panel">
+          <div class="admin-section">
+            <h3>Informações do Staff</h3>
+            <p>Bem-vindo, ${currentAdmin.username}</p>
+            <p>Nível de Admin: ${currentAdmin.level}</p>
+          </div>
+          
+          <div class="admin-section">
+            <h3>Ações Rápidas</h3>
+            <div class="admin-actions">
+              <button class="btn" onclick="showServerControl()">Controle do Servidor</button>
+              <button class="btn" onclick="showPlayerStats()">Estatísticas</button>
+            </div>
+          </div>
         </div>
         <button class="btn" onclick="toggleMenu('admin')">Voltar</button>
       `;
@@ -756,26 +999,25 @@
     function showReports() {
       document.getElementById('main').innerHTML = `
         <h1>Denúncias Recentes</h1>
-        <div style="text-align: left; margin: 20px 0;">
-          <div style="padding: 10px; background: rgba(255,0,0,0.1); border-radius: 5px; margin-bottom: 10px;">
-            <h3>JogadorX - Uso de hacks</h3>
-            <p>Reportado por: JogadorY</p>
-            <p>Data: 01/05/2025</p>
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-              <button class="btn" style="padding: 5px; font-size: 12px;">Banir</button>
-              <button class="btn" style="padding: 5px; font-size: 12px;">Ignorar</button>
-              <button class="btn" style="padding: 5px; font-size: 12px;">Investigar</button>
-            </div>
+        <div class="admin-section">
+          <h3>JogadorX - Uso de hacks</h3>
+          <p>Reportado por: JogadorY</p>
+          <p>Data: 01/05/2025</p>
+          <div class="admin-actions">
+            <button class="btn" onclick="banPlayer('JogadorX')">Banir</button>
+            <button class="btn" onclick="ignoreReport(1)">Ignorar</button>
+            <button class="btn" onclick="investigate('JogadorX')">Investigar</button>
           </div>
-          <div style="padding: 10px; background: rgba(255,165,0,0.1); border-radius: 5px;">
-            <h3>JogadorY - Linguagem ofensiva</h3>
-            <p>Reportado por: JogadorZ</p>
-            <p>Data: 30/04/2025</p>
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-              <button class="btn" style="padding: 5px; font-size: 12px;">Mutar</button>
-              <button class="btn" style="padding: 5px; font-size: 12px;">Ignorar</button>
-              <button class="btn" style="padding: 5px; font-size: 12px;">Avisar</button>
-            </div>
+        </div>
+        
+        <div class="admin-section">
+          <h3>JogadorY - Linguagem ofensiva</h3>
+          <p>Reportado por: JogadorZ</p>
+          <p>Data: 30/04/2025</p>
+          <div class="admin-actions">
+            <button class="btn" onclick="mutePlayer('JogadorY')">Mutar</button>
+            <button class="btn" onclick="ignoreReport(2)">Ignorar</button>
+            <button class="btn" onclick="warnPlayer('JogadorY')">Avisar</button>
           </div>
         </div>
         <button class="btn" onclick="toggleMenu('admin')">Voltar</button>
@@ -785,17 +1027,28 @@
     function showPlayerManagement() {
       document.getElementById('main').innerHTML = `
         <h1>Gerenciar Players</h1>
-        <input type="text" placeholder="Buscar jogador" id="searchPlayer">
-        <div style="margin: 20px 0;">
-          <button class="btn" onclick="banPlayer()">Banir</button>
-          <button class="btn" onclick="kickPlayer()">Kickar</button>
-          <button class="btn" onclick="warnPlayer()">Avisar</button>
+        <div class="input-group">
+          <label for="searchPlayer">Buscar jogador</label>
+          <div class="input-field">
+            <i class="fas fa-search input-icon"></i>
+            <input type="text" id="searchPlayer" placeholder="Digite o nome do jogador">
+          </div>
         </div>
-        <div id="playerList" style="text-align: left; max-height: 200px; overflow-y: auto;">
+        
+        <div class="admin-actions" style="margin-bottom: 20px;">
+          <button class="btn" onclick="banPlayer(document.getElementById('searchPlayer').value)">Banir</button>
+          <button class="btn" onclick="kickPlayer(document.getElementById('searchPlayer').value)">Kickar</button>
+          <button class="btn" onclick="warnPlayer(document.getElementById('searchPlayer').value)">Avisar</button>
+        </div>
+        
+        <div id="playerList" style="text-align: left; max-height: 300px; overflow-y: auto;">
           ${players.map(player => `
-            <div style="padding: 8px; border-bottom: 1px solid #333; display: flex; justify-content: space-between;">
-              <span>${player.name}</span>
-              <span>Level: ${player.level}</span>
+            <div class="admin-section" style="margin-bottom: 10px;">
+              <h3>${player.name}</h3>
+              <p>Level: ${player.level} | VIP: ${player.vipLevel}</p>
+              <div class="admin-actions">
+                <button class="btn" style="padding: 5px 10px; font-size: 12px;" onclick="managePlayer('${player.name}')">Gerenciar</button>
+              </div>
             </div>
           `).join('')}
         </div>
@@ -806,20 +1059,113 @@
     function showAdminManagement() {
       if(currentAdmin.level < 1340) {
         showAlert('Acesso restrito a Dono/Fundador!', 'error');
+        showAdminPanel();
         return;
       }
       
       document.getElementById('main').innerHTML = `
         <h1>Gerenciar Staff</h1>
-        <input type="text" placeholder="Nome do jogador" id="adminPlayerName">
-        <select id="adminLevelSelect">
-          <option value="10">Moderador (Nível 10)</option>
-          <option value="50">Admin (Nível 50)</option>
-          <option value="1340">Dono (Nível 1340)</option>
-        </select>
+        <div class="input-group">
+          <label for="adminPlayerName">Nome do jogador</label>
+          <div class="input-field">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="adminPlayerName" placeholder="Digite o nome do jogador">
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="adminLevelSelect">Nível de Admin</label>
+          <div class="input-field">
+            <i class="fas fa-shield-alt input-icon"></i>
+            <select id="adminLevelSelect">
+              <option value="10">Moderador (Nível 10)</option>
+              <option value="50">Admin (Nível 50)</option>
+              <option value="1340">Dono (Nível 1340)</option>
+            </select>
+          </div>
+        </div>
+        
         <button class="btn" onclick="assignAdmin()">Confirmar</button>
         <button class="btn" onclick="toggleMenu('admin')">Voltar</button>
       `;
+    }
+
+    // Funções administrativas
+    function banPlayer(playerName) {
+      showAlert(`Jogador ${playerName} banido com sucesso!`, 'success');
+    }
+
+    function kickPlayer(playerName) {
+      showAlert(`Jogador ${playerName} kickado com sucesso!`, 'success');
+    }
+
+    function warnPlayer(playerName) {
+      showAlert(`Aviso enviado para ${playerName}!`, 'success');
+    }
+
+    function mutePlayer(playerName) {
+      showAlert(`Jogador ${playerName} mutado com sucesso!`, 'success');
+    }
+
+    function ignoreReport(reportId) {
+      showAlert(`Denúncia #${reportId} ignorada!`, 'success');
+    }
+
+    function investigate(playerName) {
+      showAlert(`Investigando jogador ${playerName}...`, 'success');
+    }
+
+    function assignAdmin() {
+      const playerName = document.getElementById('adminPlayerName').value;
+      const level = document.getElementById('adminLevelSelect').value;
+      
+      const player = players.find(p => p.name === playerName);
+      if (player) {
+        player.adminLevel = parseInt(level);
+        showAlert(`Admin level ${level} atribuído a ${playerName}!`, 'success');
+      } else {
+        showAlert('Jogador não encontrado!', 'error');
+      }
+    }
+
+    function showServerControl() {
+      document.getElementById('main').innerHTML = `
+        <h1>Controle do Servidor</h1>
+        <div class="admin-section">
+          <h3>Status do Servidor</h3>
+          <p>Servidor ${selectedServer} - Online</p>
+          <p>Jogadores: ${players.length}/100</p>
+        </div>
+        
+        <div class="admin-actions">
+          <button class="btn" onclick="restartServer()">Reiniciar Servidor</button>
+          <button class="btn" onclick="announceToServer()">Anúncio Global</button>
+        </div>
+        <button class="btn" onclick="showAdminPanel()">Voltar</button>
+      `;
+    }
+
+    function showPlayerStats() {
+      document.getElementById('main').innerHTML = `
+        <h1>Estatísticas de Jogadores</h1>
+        <div class="admin-section">
+          <h3>Total de Jogadores: ${players.length}</h3>
+          <p>VIPs: ${players.filter(p => p.vipLevel > 0).length}</p>
+          <p>Staff: ${players.filter(p => p.adminLevel > 0).length}</p>
+        </div>
+        <button class="btn" onclick="showAdminPanel()">Voltar</button>
+      `;
+    }
+
+    function restartServer() {
+      showAlert('Servidor será reiniciado em 60 segundos!', 'success');
+    }
+
+    function announceToServer() {
+      const message = prompt('Digite a mensagem para o anúncio global:');
+      if (message) {
+        showAlert(`Anúncio enviado: "${message}"`, 'success');
+      }
     }
 
     // Funções de autenticação e registro
@@ -827,18 +1173,48 @@
       document.getElementById('main').innerHTML = `
         <h1>Criar Nova Conta</h1>
         <div id="registerAlert"></div>
-        <input type="text" placeholder="Nome de usuário" id="regUser">
-        <input type="email" placeholder="E-mail" id="regEmail">
-        <input type="password" placeholder="Senha" id="regPass">
-        <input type="password" placeholder="Confirmar Senha" id="regConfirmPass">
-        <div class="server-tabs" style="margin: 10px 0;">
+        
+        <div class="input-group">
+          <label for="regUser">Nome de Usuário</label>
+          <div class="input-field">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="regUser" placeholder="Digite seu usuário" required>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="regEmail">E-mail</label>
+          <div class="input-field">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="regEmail" placeholder="Digite seu e-mail" required>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="regPass">Senha</label>
+          <div class="input-field">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="regPass" placeholder="Digite sua senha" required>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="regConfirmPass">Confirmar Senha</label>
+          <div class="input-field">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="regConfirmPass" placeholder="Confirme sua senha" required>
+          </div>
+        </div>
+        
+        <div class="server-tabs" style="margin: 15px 0;">
           <div class="server-tab active" onclick="selectServer(1)">Servidor 1</div>
           <div class="server-tab" onclick="selectServer(2)">Servidor 2</div>
         </div>
+        
         <button class="btn" onclick="register()">Registrar</button>
-        <div class="back-btn" onclick="showLoginForm()">
-          <span class="material-symbols-outlined">arrow_back</span>
-          Voltar para o login
+        
+        <div class="links">
+          <a href="#" onclick="showLoginForm()"><i class="fas fa-arrow-left"></i> Voltar para o login</a>
         </div>
       `;
     }
@@ -847,11 +1223,19 @@
       document.getElementById('main').innerHTML = `
         <h1>Recuperar Conta</h1>
         <div id="recoverAlert"></div>
-        <input type="email" placeholder="E-mail cadastrado" id="recoverEmail">
+        
+        <div class="input-group">
+          <label for="recoverEmail">E-mail Cadastrado</label>
+          <div class="input-field">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="recoverEmail" placeholder="Digite seu e-mail cadastrado" required>
+          </div>
+        </div>
+        
         <button class="btn" onclick="sendRecovery()">Enviar Código</button>
-        <div class="back-btn" onclick="showLoginForm()">
-          <span class="material-symbols-outlined">arrow_back</span>
-          Voltar para o login
+        
+        <div class="links">
+          <a href="#" onclick="showLoginForm()"><i class="fas fa-arrow-left"></i> Voltar para o login</a>
         </div>
       `;
     }
@@ -860,14 +1244,37 @@
       document.getElementById('main').innerHTML = `
         <h1>Verificação de Código</h1>
         <div id="codeAlert"></div>
-        <p>Enviamos um código para ${recoveryEmail}</p>
-        <input type="text" placeholder="Código de verificação" id="recoveryCode">
-        <input type="password" placeholder="Nova senha" id="newPass">
-        <input type="password" placeholder="Confirmar nova senha" id="confirmNewPass">
+        
+        <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px;">Enviamos um código para ${recoveryEmail}</p>
+        
+        <div class="input-group">
+          <label for="recoveryCode">Código de Verificação</label>
+          <div class="input-field">
+            <i class="fas fa-key input-icon"></i>
+            <input type="text" id="recoveryCode" placeholder="Digite o código recebido" required>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="newPass">Nova Senha</label>
+          <div class="input-field">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="newPass" placeholder="Digite sua nova senha" required>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="confirmNewPass">Confirmar Nova Senha</label>
+          <div class="input-field">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="confirmNewPass" placeholder="Confirme sua nova senha" required>
+          </div>
+        </div>
+        
         <button class="btn" onclick="verifyRecoveryCode()">Redefinir Senha</button>
-        <div class="back-btn" onclick="showRecoverForm()">
-          <span class="material-symbols-outlined">arrow_back</span>
-          Voltar
+        
+        <div class="links">
+          <a href="#" onclick="showRecoverForm()"><i class="fas fa-arrow-left"></i> Voltar</a>
         </div>
       `;
     }
@@ -876,29 +1283,63 @@
       document.getElementById('main').innerHTML = `
         <h1>Warshot PVP</h1>
         <div id="loginAlert"></div>
-        <input type="text" placeholder="Conta" id="user">
-        <input type="password" placeholder="Senha" id="pass">
+        
+        <div class="input-group">
+          <label for="user">Nome de Usuário</label>
+          <div class="input-field">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="user" placeholder="Digite seu usuário" required>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="pass">Senha</label>
+          <div class="input-field">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="pass" placeholder="Digite sua senha" required>
+          </div>
+        </div>
+        
         <div class="server-tabs" id="loginServers">
           <div class="server-tab active" onclick="selectServer(1)">Servidor 1</div>
           <div class="server-tab" onclick="selectServer(2)">Servidor 2</div>
         </div>
+        
         <button class="btn" onclick="login()">Entrar</button>
-        <button class="admin-btn" onclick="showAdminLogin()">Administrador</button>
-        <span class="link" onclick="showRegisterForm()">Criar Conta</span>
-        <span class="link" onclick="showRecoverForm()">Esqueceu a senha?</span>
+        <button class="admin-btn" onclick="showAdminLogin()">Acesso Staff</button>
+        
+        <div class="links">
+          <a href="#" onclick="showRegisterForm()"><i class="fas fa-user-plus"></i> Criar Conta</a>
+          <a href="#" onclick="showRecoverForm()"><i class="fas fa-key"></i> Recuperar Senha</a>
+        </div>
       `;
     }
 
     function showAdminLogin() {
       document.getElementById('main').innerHTML = `
-        <h1>Login Admin</h1>
+        <h1>Acesso Staff</h1>
         <div id="adminAlert"></div>
-        <input type="text" placeholder="Usuário Admin" id="adminUser">
-        <input type="password" placeholder="Senha Admin" id="adminPass">
+        
+        <div class="input-group">
+          <label for="adminUser">Usuário Staff</label>
+          <div class="input-field">
+            <i class="fas fa-user-shield input-icon"></i>
+            <input type="text" id="adminUser" placeholder="Digite seu usuário staff" required>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="adminPass">Senha Staff</label>
+          <div class="input-field">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="adminPass" placeholder="Digite sua senha staff" required>
+          </div>
+        </div>
+        
         <button class="btn" onclick="adminLogin()">Entrar</button>
-        <div class="back-btn" onclick="showLoginForm()">
-          <span class="material-symbols-outlined">arrow_back</span>
-          Voltar para o login normal
+        
+        <div class="links">
+          <a href="#" onclick="showLoginForm()"><i class="fas fa-arrow-left"></i> Voltar para o login normal</a>
         </div>
       `;
     }
@@ -924,7 +1365,6 @@
       }, 3000);
     }
 
-    // Funções de autenticação
     function login() {
       const username = document.getElementById('user').value;
       const password = document.getElementById('pass').value;
@@ -936,8 +1376,9 @@
         hideAllMenus();
         showMenu('player');
         showPlayerInfo();
+        showAlert('Login realizado com sucesso!', 'success');
       } else {
-        showAlert('Login ou senha incorretos!', 'error');
+        showAlert('Usuário ou senha incorretos!', 'error');
       }
     }
 
@@ -962,7 +1403,6 @@
         return;
       }
       
-      // Adiciona novo jogador
       players.push({
         name: username,
         email: email,
@@ -1008,9 +1448,6 @@
         return;
       }
       
-      // Na prática, aqui você validaria o código recebido por e-mail
-      // Mas como é um exemplo, vamos considerar que qualquer código serve
-      
       const playerIndex = players.findIndex(p => p.email === recoveryEmail);
       if (playerIndex !== -1) {
         players[playerIndex].password = newPass;
@@ -1023,16 +1460,14 @@
       const username = document.getElementById('adminUser').value;
       const password = document.getElementById('adminPass').value;
       
-      const admin = admins.find(a => 
-        a.username === username && 
-        a.password === password
-      );
+      const admin = admins.find(a => a.username === username && a.password === password);
       
       if (admin) {
         currentAdmin = admin;
         hideAllMenus();
         showMenu('admin');
         showAdminPanel();
+        showAlert(`Staff logado com sucesso! Nível: ${admin.level}`, 'success');
       } else {
         showAlert('Credenciais inválidas!', 'error');
       }
@@ -1050,28 +1485,6 @@
       currentAdmin = null;
       hideAllMenus();
       showLoginForm();
-    }
-
-    // Funções auxiliares do admin
-    function banPlayer() {
-      const playerName = document.getElementById('searchPlayer').value;
-      showAlert(`Jogador ${playerName} banido com sucesso!`, 'success');
-    }
-
-    function kickPlayer() {
-      const playerName = document.getElementById('searchPlayer').value;
-      showAlert(`Jogador ${playerName} kickado com sucesso!`, 'success');
-    }
-
-    function warnPlayer() {
-      const playerName = document.getElementById('searchPlayer').value;
-      showAlert(`Aviso enviado para ${playerName}!`, 'success');
-    }
-
-    function assignAdmin() {
-      const playerName = document.getElementById('adminPlayerName').value;
-      const level = document.getElementById('adminLevelSelect').value;
-      showAlert(`Admin level ${level} atribuído a ${playerName}!`, 'success');
     }
 
     // Inicialização
